@@ -2,6 +2,20 @@ const input = document.querySelector('#alturaInput');
 const boton = document.querySelector('#botonGenerar');
 const pantalla = document.querySelector('#resultado');
 
+function generarAsteriscos(n) {
+    let resultado = "";
+
+    for (let i = 1; i <= n; i++) {
+
+        for (let j = 0; j < i; j++) {
+            resultado += "*";
+        }
+
+        resultado += "\n";
+    }
+    return resultado;
+}
+
 boton.addEventListener('click', () => {
     const altura = Number(input.value);
 
@@ -11,16 +25,8 @@ boton.addEventListener('click', () => {
         return;
     }
 
-    let arbol = "";
-    for (let i = 1; i <= altura; i++) {
-        
-        for (let j = 0; j < i; j++) {
-            arbol += "*";
-        }
+    const arbolFinal = generarAsteriscos(altura);
 
-        arbol += "\n";
-    }
-
-    pantalla.innerHTML = arbol;
+    pantalla.innerHTML = arbolFinal;
     pantalla.style.color = "pink";
 });

@@ -1,13 +1,10 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { NavbarLibreria } from '../components/NavbarLibreria';
 import { Hero } from '../components/Hero';
 import { LibroCard } from '../components/LibroCard';
-import { Footer } from '../components/Footer';
 
 export function Home() {
     return (
         <>
-            <NavbarLibreria />
             <Hero />
 
             <Container className="mt-5 mb-5">
@@ -57,7 +54,6 @@ export function Home() {
                 </Row>
             </Container>
 
-            <Footer />
         </>
     );
 }

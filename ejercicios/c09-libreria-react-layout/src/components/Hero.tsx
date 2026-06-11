@@ -1,4 +1,5 @@
 import { Container, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export function Hero() {
     return (
@@ -6,7 +7,9 @@ export function Hero() {
             <Container>
                 <h1>Bienvenidos a la mejor librería</h1>
                 <p>Tenemos los mejores libros</p>
-                <Button variant="light" href="#catalogo">Ir al catálogo</Button>
+                <Link to="/catalogo">
+                    <Button variant="light">Ir al catálogo</Button>
+                </Link>
             </Container>
         </div>
     );

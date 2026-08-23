@@ -1,0 +1,78 @@
+@baseUrl = http://localhost:3000
+
+### LIBROS
+
+### listar todos los libros (200)
+GET {{baseUrl}}/api/libros
+
+### listar solo disponibles (200)
+GET {{baseUrl}}/api/libros?disponible=true
+
+### ver un libro existente (200)
+GET {{baseUrl}}/api/libros/1
+
+### ver un libro inexistente (404)
+GET {{baseUrl}}/api/libros/999
+
+### crear un libro (201)
+POST {{baseUrl}}/api/libros
+Content-Type: application/json
+
+{
+  "titulo": "Rayuela",
+  "autor": "Julio Cortázar",
+  "imagen": "https://example.com/rayuela.jpg",
+  "precio": 16000,
+  "disponible": true
+}
+
+### editar un libro existente (200)
+PUT {{baseUrl}}/api/libros/1
+Content-Type: application/json
+
+{
+  "titulo": "GATURRO MUNDIAL 26 - EDICIÓN ESPECIAL",
+  "autor": "Nik",
+  "imagen": "https://cdn.livriz.com/media/mediaspace/F9AFB48D-741D-4834-B760-F59344EEFF34/45/a95e9bcb-08f2-459c-a7c3-4bf4ee182271/mediamodifierc0ce9a85c3f.webp",
+  "precio": 13500,
+  "disponible": true
+}
+
+### borrar un libro (204)
+DELETE {{baseUrl}}/api/libros/1
+
+### brrar libro inexistente (404)
+DELETE {{baseUrl}}/api/libros/999
+
+
+### AUTORES 
+
+### listar todos los autores (200)
+GET {{baseUrl}}/api/autores
+
+### ver un autor existente (200)
+GET {{baseUrl}}/api/autores/1
+
+### ver un autor inexistente (404)
+GET {{baseUrl}}/api/autores/999
+
+### crear un autor (201)
+POST {{baseUrl}}/api/autores
+Content-Type: application/json
+
+{
+  "nombre": "Julio Cortázar",
+  "nacionalidad": "Argentina"
+}
+
+### editar un autor (200)
+PUT {{baseUrl}}/api/autores/2
+Content-Type: application/json
+
+{
+  "nombre": "Nik (Cristian Dzwonik)",
+  "nacionalidad": "Argentina"
+}
+
+### Borrar un autor (204)
+DELETE {{baseUrl}}/api/autores/1

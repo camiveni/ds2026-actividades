@@ -1,0 +1,198 @@
+@baseUrl = http://localhost:3000
+
+### ----------------------------------------------------
+### 1. AUTENTICACIÓN (Registro y Logins)
+### ----------------------------------------------------
+
+### 1) POST /auth/registro válido (201 sin passwordHash)
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "email": "ana@libreria.test",
+  "password": "Libreria2026"
+}
+
+### 2) POST /auth/registro mismo email (409)
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "email": "ana@libreria.test",
+  "password": "Libreria2026"
+}
+
+### 3) POST /auth/registro password corta (400 con los errores)
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "email": "ana2@libreria.test",
+  "password": "corta"
+}
+
+### 4) POST /auth/login mail que no existe (401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "noexiste@libreria.test",
+  "password": "Admin1234"
+}
+
+### 5) POST /auth/login password incorrecta (401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@libreria.test",
+  "password": "PasswordEquivocada"
+}
+
+### 6) POST /auth/login correcto ADMIN (200 con token)
+# @name loginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@libreria.test",
+  "password": "Admin1234"
+}
+
+### Guardamos el token de Admin
+@tokenAdmin = {{loginAdmin.response.body.token}}
+
+### Login CLIENTE correcto (200 con token)
+# @name loginCliente
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@libreria.test",
+  "password": "Cliente1234"
+}
+
+### Guardamos el token de Cliente
+@tokenCliente = {{loginCliente.response.body.token}}
+
+### ----------------------------------------------------
+### 2. ENDPOINT /api/auth/yo
+### ----------------------------------------------------
+
+### 7) GET /auth/yo sin header (401)
+GET {{baseUrl}}/api/auth/yo
+
+### 8) GET /auth/yo con token CLIENTE (200)
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{tokenCliente}}
+
+### GET /auth/yo con token ADMIN (200)
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{tokenAdmin}}
+
+
+### ----------------------------------------------------
+### 3. LIBROS (Matriz de permisos)
+### ----------------------------------------------------
+
+### 12) GET /api/libros público sin header (200)
+GET {{baseUrl}}/api/libros
+
+### GET /api/libros con filtro disponible (200)
+GET {{baseUrl}}/api/libros?disponible=true
+
+### GET /api/libros/:id existente con autor y categorías (200)
+GET {{baseUrl}}/api/libros/1
+
+### GET /api/libros/:id inexistente (404)
+GET {{baseUrl}}/api/libros/999
+
+### 9) POST /api/libros sin header (401)
+POST {{baseUrl}}/api/libros
+Content-Type: application/json
+
+{
+  "titulo": "Rayuela",
+  "precio": 16000,
+  "imagen": "https://example.com/rayuela.jpg",
+  "disponible": true,
+  "autorId": 1
+}
+
+### 10) POST /api/libros con rol CLIENTE (403)
+POST {{baseUrl}}/api/libros
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "titulo": "Rayuela",
+  "precio": 16000,
+  "imagen": "https://example.com/rayuela.jpg",
+  "disponible": true,
+  "autorId": 1
+}
+
+### 11) POST /api/libros con rol ADMIN (201)
+POST {{baseUrl}}/api/libros
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiQURNSU4iLCJpYXQiOjE3ODg2NTU3MDgsImV4cCI6MTc4ODY2MjkwOH0.5z3ucW4vnN1z3UlZZS7bWfifFTpxIR_Ht90tJfzFPro
+Content-Type: application/json
+
+{
+  "titulo": "Rayuela",
+  "precio": 16000,
+  "imagen": "https://example.com/rayuela.jpg",
+  "disponible": true,
+  "autorId": 1
+}
+
+### PUT /api/libros/:id solo ADMIN (200)
+PUT {{baseUrl}}/api/libros/1
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "titulo": "GATURRO MUNDIAL 26 - EDICIÓN ESPECIAL",
+  "precio": 13500
+}
+
+### DELETE /api/libros/:id solo ADMIN (204)
+DELETE {{baseUrl}}/api/libros/1
+Authorization: Bearer {{tokenAdmin}}
+
+
+### ----------------------------------------------------
+### 4. AUTORES (Solo lectura pública, escritura ADMIN)
+### ----------------------------------------------------
+
+### GET /api/autores público (200)
+GET {{baseUrl}}/api/autores
+
+### GET /api/autores/:id existente (200)
+GET {{baseUrl}}/api/autores/1
+
+### POST /api/autores solo ADMIN (201)
+POST {{baseUrl}}/api/autores
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nombre": "Jorge Luis Borges",
+  "nacionalidad": "Argentina"
+}
+
+### PUT /api/autores/:id solo ADMIN (200)
+PUT {{baseUrl}}/api/autores/2
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nombre": "Antoine de Saint-Exupéry Editado",
+  "nacionalidad": "Francia"
+}
+
+### DELETE /api/autores/:id solo ADMIN (204)
+DELETE {{baseUrl}}/api/autores/5
+Authorization: Bearer {{tokenAdmin}}

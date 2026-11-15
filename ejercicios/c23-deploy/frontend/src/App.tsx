@@ -8,6 +8,7 @@ import { Login } from './pages/Login';
 import { SinPermiso } from './pages/SinPermiso';
 import { PrivateRoute } from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
+import './App.css';
 
 function App() {
   return (

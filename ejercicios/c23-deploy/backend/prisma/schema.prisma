@@ -37,6 +37,8 @@ model Libro {
   autorId    Int
   autor      Autor       @relation(fields: [autorId], references: [id], onDelete: Restrict)
   categorias Categoria[]
+  genero     String?
+  isbn       String?
 }
 
 model Categoria {

@@ -1,24 +1,22 @@
 FROM node:22-alpine
 
-#directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# copiar solo archivos de dependencias
+# Copiar dependencias
 COPY package*.json ./
 
-# copiar la carpeta prisma antes de instalar para que el cliente se genere bien
+# Copiar la carpeta prisma para que el cliente se pueda generar
 COPY prisma ./prisma/
 
 RUN npm install
 
-# copiar el resto del código del proyecto
+# Copiar el resto del código
 COPY . .
 
-# gnerar cliente de Prisma para Alpine
+# Generar el cliente de Prisma explícitamente
 RUN npx prisma generate
 
-# exponer puerto del servidor
 EXPOSE 3000
 
-# comando para iniciar la aplicación en producción
+# Usar start en lugar de dev para producción
 CMD ["npm", "start"]
